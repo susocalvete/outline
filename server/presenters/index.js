@@ -5,6 +5,7 @@ import presentDocument from "./document";
 import presentEvent from "./event";
 import presentRevision from "./revision";
 import presentCollection from "./collection";
+import presentComment from "./comment";
 import presentApiKey from "./apiKey";
 import presentShare from "./share";
 import presentTeam from "./team";
@@ -24,6 +25,7 @@ export {
   presentEvent,
   presentRevision,
   presentCollection,
+  presentComment,
   presentApiKey,
   presentShare,
   presentTeam,

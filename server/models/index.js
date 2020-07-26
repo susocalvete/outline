@@ -4,8 +4,9 @@ import Attachment from "./Attachment";
 import Authentication from "./Authentication";
 import Backlink from "./Backlink";
 import Collection from "./Collection";
-import CollectionUser from "./CollectionUser";
 import CollectionGroup from "./CollectionGroup";
+import CollectionUser from "./CollectionUser";
+import Comment from "./Comment";
 import Document from "./Document";
 import Event from "./Event";
 import Integration from "./Integration";
@@ -28,6 +29,7 @@ const models = {
   Collection,
   CollectionGroup,
   CollectionUser,
+  Comment,
   Document,
   Event,
   Group,
@@ -58,6 +60,7 @@ export {
   Collection,
   CollectionGroup,
   CollectionUser,
+  Comment,
   Document,
   Event,
   Group,
