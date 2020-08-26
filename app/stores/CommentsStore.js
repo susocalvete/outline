@@ -1,5 +1,6 @@
 // @flow
 import invariant from "invariant";
+import { filter } from "lodash";
 import { action, runInAction } from "mobx";
 import Comment from "models/Comment";
 import BaseStore from "./BaseStore";
@@ -12,6 +13,13 @@ export default class CommentsStore extends BaseStore<Comment> {
 
   constructor(rootStore: RootStore) {
     super(rootStore, Comment);
+  }
+
+  document(documentId: string): Comment[] {
+    return filter(
+      this.orderedData,
+      (comment) => comment.documentId === documentId
+    );
   }
 
   @action

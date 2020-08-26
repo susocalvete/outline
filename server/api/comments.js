@@ -75,6 +75,7 @@ router.post("comments.list", auth(), pagination(), async (ctx) => {
   };
 });
 
+// router.post("comments.info", auth(), async (ctx) => {
 // router.post("comments.update", auth(), async (ctx) => {
 // router.post("comments.delete", auth(), async (ctx) => {
 // router.post("comments.resolve", auth(), async (ctx) => {

@@ -10,7 +10,7 @@ const Comment = sequelize.define(
       primaryKey: true,
     },
     text: {
-      type: DataTypes.DATE,
+      type: DataTypes.TEXT,
     },
     resolvedAt: {
       type: DataTypes.DATE,

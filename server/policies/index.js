@@ -3,6 +3,7 @@ import { Team, User, Collection, Document, Group } from "../models";
 import policy from "./policy";
 import "./apiKey";
 import "./collection";
+import "./comment";
 import "./document";
 import "./integration";
 import "./notificationSetting";
