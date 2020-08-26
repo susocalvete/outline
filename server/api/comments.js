@@ -10,20 +10,23 @@ const { authorize } = policy;
 const router = new Router();
 
 router.post("comments.create", auth(), async (ctx) => {
-  const { documentId, parentDocumentId, text } = ctx.body;
+  const { documentId, parentCommentId, text } = ctx.body;
   ctx.assertUuid(documentId, "documentId is required");
   ctx.assertPresent(text, "text is required");
 
-  if (parentDocumentId) {
-    ctx.assertUuid(parentDocumentId, "parentDocumentId must be a uuid");
+  if (parentCommentId) {
+    ctx.assertUuid(parentCommentId, "parentCommentId must be a uuid");
   }
 
   const user = ctx.state.user;
   authorize(user, "create", Comment);
 
+  const document = await Document.findByPk(documentId, { userId: user.id });
+  authorize(user, "read", document);
+
   const comment = await Comment.create({
     text,
-    parentDocumentId,
+    parentCommentId,
     documentId,
     createdById: user.id,
   });
@@ -35,6 +38,7 @@ router.post("comments.create", auth(), async (ctx) => {
     teamId: user.teamId,
     actorId: user.id,
     ip: ctx.request.ip,
+    data: { parentCommentId },
   });
 
   ctx.body = {
@@ -50,7 +54,7 @@ router.post("comments.list", auth(), pagination(), async (ctx) => {
   if (direction !== "ASC") direction = "DESC";
   const user = ctx.state.user;
 
-  const document = await Document.findByPk(documentId);
+  const document = await Document.findByPk(documentId, { userId: user.id });
   authorize(user, "read", document);
 
   const comments = await Comment.findAll({
@@ -65,5 +69,10 @@ router.post("comments.list", auth(), pagination(), async (ctx) => {
     data: comments.map(presentComment),
   };
 });
+
+// router.post("comments.update", auth(), async (ctx) => {
+// router.post("comments.delete", auth(), async (ctx) => {
+// router.post("comments.resolve", auth(), async (ctx) => {
+// router.post("comments.unresolve", auth(), async (ctx) => {
 
 export default router;

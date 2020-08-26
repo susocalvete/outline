@@ -17,7 +17,7 @@ const Comment = sequelize.define(
     },
   },
   {
-    classMethods: {},
+    paranoid: true,
   }
 );
 
@@ -26,14 +26,30 @@ Comment.associate = (models) => {
     as: "user",
     foreignKey: "createdById",
   });
+  Comment.belongsTo(models.User, {
+    as: "resolver",
+    foreignKey: "resolvedById",
+  });
   Comment.belongsTo(models.Document, {
     as: "document",
     foreignKey: "documentId",
   });
   Comment.belongsTo(models.Comment, {
-    as: "comment",
+    as: "parent",
     foreignKey: "parentCommentId",
   });
+};
+
+Comment.prototype.resolve = function (userId: string) {
+  this.resolvedById = userId;
+  this.resolvedAt = new Date();
+  return this.save();
+};
+
+Comment.prototype.unresolve = function () {
+  this.resolvedById = null;
+  this.resolvedAt = null;
+  return this.save();
 };
 
 export default Comment;
