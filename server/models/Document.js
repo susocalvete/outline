@@ -101,7 +101,7 @@ const Document = sequelize.define(
     template: DataTypes.BOOLEAN,
     editorVersion: DataTypes.STRING,
     text: DataTypes.TEXT,
-    comments: DataTypes.JSON,
+    commentPositions: DataTypes.JSON,
 
     // backup contains a record of text at the moment it was converted to v2
     // this is a safety measure during deployment of new editor and will be
@@ -627,6 +627,28 @@ Document.prototype.delete = function (userId: string) {
       return this;
     }
   );
+};
+
+Document.prototype.addComment = function ({ commentId, from, to }) {
+  if (!this.commentPositions) {
+    this.commentPositions = {};
+  }
+  this.commentPositions[commentId] = { from, to };
+
+  return this.save({
+    fields: ["commentPositions"],
+  });
+};
+
+Document.prototype.removeComment = function (commentId) {
+  if (!this.commentPositions) {
+    return this;
+  }
+  delete this.commentPositions[commentId];
+
+  return this.save({
+    fields: ["commentPositions"],
+  });
 };
 
 Document.prototype.getTimestamp = function () {

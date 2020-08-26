@@ -7,6 +7,7 @@ import styled from "styled-components";
 import parseTitle from "shared/utils/parseTitle";
 import Document from "models/Document";
 import ClickablePadding from "components/ClickablePadding";
+import Comments from "components/Comments";
 import DocumentMetaWithViews from "components/DocumentMetaWithViews";
 import Editor from "components/Editor";
 import Flex from "components/Flex";
@@ -77,45 +78,48 @@ class DocumentEditor extends React.Component<Props> {
     const startsWithEmojiAndSpace = !!(emoji && title.startsWith(`${emoji} `));
 
     return (
-      <Flex auto column>
-        <React.Suspense fallback={<LoadingPlaceholder />}>
-          <Title
-            type="text"
-            onChange={onChangeTitle}
-            onKeyDown={this.handleTitleKeyDown}
-            placeholder={document.placeholder}
-            value={!title && readOnly ? document.titleWithDefault : title}
-            style={
-              startsWithEmojiAndSpace ? { marginLeft: "-1.2em" } : undefined
-            }
-            readOnly={readOnly}
-            autoFocus={!title}
-            maxLength={100}
-          />
-          <DocumentMetaWithViews
-            isDraft={isDraft}
-            document={document}
-            to={documentHistoryUrl(document)}
-          />
-          <Editor
-            ref={this.editor}
-            autoFocus={title && !this.props.defaultValue}
-            placeholder="…the rest is up to you"
-            onHoverLink={this.handleLinkActive}
-            scrollTo={window.location.hash}
-            grow
-            {...this.props}
-          />
-          {!readOnly && <ClickablePadding onClick={this.focusAtEnd} grow />}
-          {this.activeLinkEvent && !isShare && readOnly && (
-            <HoverPreview
-              node={this.activeLinkEvent.target}
-              event={this.activeLinkEvent}
-              onClose={this.handleLinkInactive}
+      <>
+        <Flex auto column>
+          <React.Suspense fallback={<LoadingPlaceholder />}>
+            <Title
+              type="text"
+              onChange={onChangeTitle}
+              onKeyDown={this.handleTitleKeyDown}
+              placeholder={document.placeholder}
+              value={!title && readOnly ? document.titleWithDefault : title}
+              style={
+                startsWithEmojiAndSpace ? { marginLeft: "-1.2em" } : undefined
+              }
+              readOnly={readOnly}
+              autoFocus={!title}
+              maxLength={100}
             />
-          )}
-        </React.Suspense>
-      </Flex>
+            <DocumentMetaWithViews
+              isDraft={isDraft}
+              document={document}
+              to={documentHistoryUrl(document)}
+            />
+            <Editor
+              ref={this.editor}
+              autoFocus={title && !this.props.defaultValue}
+              placeholder="…the rest is up to you"
+              onHoverLink={this.handleLinkActive}
+              scrollTo={window.location.hash}
+              grow
+              {...this.props}
+            />
+            {!readOnly && <ClickablePadding onClick={this.focusAtEnd} grow />}
+            {this.activeLinkEvent && !isShare && readOnly && (
+              <HoverPreview
+                node={this.activeLinkEvent.target}
+                event={this.activeLinkEvent}
+                onClose={this.handleLinkInactive}
+              />
+            )}
+          </React.Suspense>
+        </Flex>
+        <Comments documentId={document.id} />
+      </>
     );
   }
 }

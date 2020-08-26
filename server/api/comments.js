@@ -10,12 +10,15 @@ const { authorize } = policy;
 const router = new Router();
 
 router.post("comments.create", auth(), async (ctx) => {
-  const { documentId, parentCommentId, text } = ctx.body;
+  const { documentId, from, to, parentCommentId, text } = ctx.body;
   ctx.assertUuid(documentId, "documentId is required");
   ctx.assertPresent(text, "text is required");
 
   if (parentCommentId) {
     ctx.assertUuid(parentCommentId, "parentCommentId must be a uuid");
+  } else {
+    ctx.assertPresent(from, "from is required");
+    ctx.assertPresent(to, "to is required");
   }
 
   const user = ctx.state.user;
@@ -30,6 +33,8 @@ router.post("comments.create", auth(), async (ctx) => {
     documentId,
     createdById: user.id,
   });
+
+  await document.addComment({ commentId: comment.id, from, to });
 
   await Event.create({
     name: "comments.create",
