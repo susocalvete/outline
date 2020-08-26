@@ -305,6 +305,19 @@ export default class Websockets {
         }
         return;
       }
+      case "comments.create":
+      case "comments.update": {
+        const document = await Document.findByPk(event.documentId, {
+          paranoid: false,
+        });
+
+        return socketio
+          .to(`collection-${document.collectionId}`)
+          .emit("entities", {
+            event: event.name,
+            commentId: event.modelId,
+          });
+      }
       case "groups.create":
       case "groups.update": {
         const group = await Group.findByPk(event.modelId, {

@@ -89,6 +89,16 @@ export type CollectionEvent =
       ip: string,
     };
 
+export type CommentEvent = {
+  name: "comments.create" | "comments.delete" | "comments.update",
+  documentId: string,
+  actorId: string,
+  modelId: string,
+  teamId: string,
+  data: { parentCommentId?: string },
+  ip: string,
+};
+
 export type GroupEvent =
   | {
       name: "groups.create" | "groups.delete" | "groups.update",
@@ -119,6 +129,7 @@ export type Event =
   | UserEvent
   | DocumentEvent
   | CollectionEvent
+  | CommentEvent
   | IntegrationEvent
   | GroupEvent;
 

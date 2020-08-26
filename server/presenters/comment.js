@@ -6,6 +6,7 @@ export default function present(comment: Comment) {
     id: comment.id,
     text: comment.text,
     documentId: comment.documentId,
+    parentCommentId: comment.parentCommentId,
     createdById: comment.createdById,
   };
 }
