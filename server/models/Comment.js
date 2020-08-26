@@ -12,13 +12,16 @@ const Comment = sequelize.define(
     text: {
       type: DataTypes.DATE,
     },
+    resolvedAt: {
+      type: DataTypes.DATE,
+    },
   },
   {
     classMethods: {},
   }
 );
 
-Comment.associate = models => {
+Comment.associate = (models) => {
   Comment.belongsTo(models.User, {
     as: "user",
     foreignKey: "createdById",

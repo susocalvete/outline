@@ -1,15 +1,15 @@
 // @flow
 import Router from "koa-router";
 import auth from "../middlewares/authentication";
-import pagination from "./middlewares/pagination";
-import { presentComment } from "../presenters";
 import { Document, Comment, Event } from "../models";
 import policy from "../policies";
+import { presentComment } from "../presenters";
+import pagination from "./middlewares/pagination";
 
 const { authorize } = policy;
 const router = new Router();
 
-router.post("comments.create", auth(), async ctx => {
+router.post("comments.create", auth(), async (ctx) => {
   const { documentId, parentDocumentId, text } = ctx.body;
   ctx.assertUuid(documentId, "documentId is required");
   ctx.assertPresent(text, "text is required");
@@ -42,7 +42,7 @@ router.post("comments.create", auth(), async ctx => {
   };
 });
 
-router.post("comments.list", auth(), pagination(), async ctx => {
+router.post("comments.list", auth(), pagination(), async (ctx) => {
   const { sort = "createdAt", documentId } = ctx.body;
   ctx.assertUuid(documentId, "documentId is required");
 
